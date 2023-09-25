@@ -47,19 +47,8 @@ public class Tablero {
 
             Coordenada movimientoRealizado = new Coordenada(fila, columna);
 
-            // Verificar si el movimiento forma parte de los pasos necesarios para ganar
-            if (coordenadasAleatorias.contains(movimientoRealizado)) {
-                // Si forma parte de los pasos necesarios, eliminarlo
-                coordenadasAleatorias.remove(movimientoRealizado);
-            } else {
-                // Verificar si el último movimiento realizado es igual al último almacenado
-                if (!movimientosRealizados.isEmpty() && movimientoRealizado.equals(movimientosRealizados.get(movimientosRealizados.size() - 1))) {
-                    // Si son iguales, eliminar el último movimiento almacenado
-                    movimientosRealizados.remove(movimientosRealizados.size() - 1);
-                }
-                // Agregar el movimiento realizado
-                movimientosRealizados.add(movimientoRealizado);
-            }
+            // ACA HAY QUE AGREGAR LOGICA PARA CONTROLAR MOVIMIENTOS
+            
 
             boolean gane = verificarVictoria();
             if (gane) {
@@ -146,7 +135,7 @@ public class Tablero {
     public void generarTableroAleatorio(int filas, int columnas, int nivel) {
     Random random = new Random();
     elementos = new Celda[filas][columnas];
-
+    
     // Llenar el tablero con elementos aleatorios y color 'R' (rojo)
     for (int fila = 0; fila < filas; fila++) {
         for (int columna = 0; columna < columnas; columna++) {
@@ -170,6 +159,8 @@ public class Tablero {
 
     
    public Coordenada obtenerCoordenadasAleatorias() {
+       
+       //HAY QUE CONTROLAR QUE NO SE GENEREN DOS VECES LA MISMA COORDENADA.
     Random random = new Random();
     int fila = random.nextInt(numFilas); // Genera un número aleatorio entre 0 y numFilas-1
     int columna = random.nextInt(numColumnas); // Genera un número aleatorio entre 0 y numColumnas-1
@@ -228,9 +219,9 @@ public String obtenerPasosNecesariosParaGanar() {
     } else if (simbolo == '\\') {
         cambiarColorDiagonal(fila, columna, nuevoColor);
     } else if (simbolo == '-') {
-        cambiarColorFila(fila, nuevoColor);
+        cambiarColorFila(fila, columna, nuevoColor);
     } else if (simbolo == '|') {
-        cambiarColorColumna(columna, nuevoColor);
+        cambiarColorColumna(fila, columna, nuevoColor);
     }
 }
 
@@ -258,9 +249,9 @@ private void cambiarColorDiagonalInversa(int fila, int columna, char colorActual
     }
 }
 
-private void cambiarColorFila(int fila, char nuevoColor) {
+private void cambiarColorFila(int fila, int columna, char nuevoColor) {
     // Cambiar el color de la celda en la fila antes de iterar
-    cambiarColorCelda(fila, fila); // Pasa la misma fila como columna
+    cambiarColorCelda(fila, columna); 
     
     // Cambiar todo el contenido de la fila al nuevo color
     for (int j = 0; j < numColumnas; j++) {
@@ -268,9 +259,9 @@ private void cambiarColorFila(int fila, char nuevoColor) {
     }
 }
 
-private void cambiarColorColumna(int columna, char nuevoColor) {
+private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
     // Cambiar el color de la celda en la columna antes de iterar
-    cambiarColorCelda(columna, columna); // Pasa la misma columna como fila
+    cambiarColorCelda(fila, columna); 
     
     // Cambiar todo el contenido de la columna al nuevo color
     for (int i = 0; i < numFilas; i++) {
