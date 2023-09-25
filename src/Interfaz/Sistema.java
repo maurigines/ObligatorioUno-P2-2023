@@ -6,14 +6,26 @@ import java.util.Scanner;
 // Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(PONER NUMERO)
 
 public class Sistema {
+  
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+         boolean jugarNuevaPartida = true; 
+         Scanner scanner = new Scanner(System.in);
+        
+       
         ConsolaUI consolaUI = new ConsolaUI();
         consolaUI.mostrarMensaje("-----------------------");
         consolaUI.mostrarMensaje("Bienvenido a Soliflips!");
         consolaUI.mostrarMensaje("-----------------------");
+        consolaUI.mostrarMensaje(" ");
+        
+        
+        consolaUI.mostrarMensaje("Desea jugar una partida? (s/n)");
+        String respuesta = scanner.nextLine().toLowerCase();
+        jugarNuevaPartida = respuesta.equals("s");
+        
+        
 
-        boolean jugarNuevaPartida = true;
+        
         
         while (jugarNuevaPartida) {
             consolaUI.mostrarMensaje("Seleccione una opcion:");
@@ -34,19 +46,21 @@ public class Sistema {
                     // Ejemplo: configurarTableroPredefinido(consolaUI, tablero);
                     break;
                 case "c":
-                     int filas = consolaUI.leerEntero("Ingrese el numero de filas del tablero: ");
-                    int columnas = consolaUI.leerEntero("Ingrese el numero de columnas del tablero: ");
+                    
+                    int filas = consolaUI.leerEntero("Ingrese cantidad de filas: ");
+                    int columnas = consolaUI.leerEntero("Ingrese cantidad de Columnas: ");
                     int nivel = consolaUI.leerEntero("Ingrese el nivel del juego: ");
 
                     Tablero tablero = new Tablero();
                     tablero.configurarJuego(filas, columnas, nivel);
 
                     while (tablero.estaEnProgreso()) {
+                        
                         consolaUI.mostrarMensaje("Estado actual del tablero:");
                         consolaUI.actualizarTablero(tablero.getElementos());
-
-                        int fila = consolaUI.leerEntero("Ingrese la Fila: ") - 1;
-                        int columna = consolaUI.leerEntero("Ingrese la Columna: ") - 1;
+                        String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
+                        int fila = Integer.parseInt(coordenadas[0]) - 1;
+                        int columna = Integer.parseInt(coordenadas[1]) - 1;
 
 
                         tablero.realizarMovimiento(fila, columna);
@@ -66,8 +80,10 @@ public class Sistema {
            
 
             // Preguntar si desea jugar una nueva partida
-            consolaUI.mostrarMensaje("¿Desea jugar una nueva partida? (s/n)");
-            String respuesta = scanner.nextLine().toLowerCase();
+            consolaUI.mostrarMensaje("Desea jugar una nueva partida? (s/n)");
+            respuesta = scanner.nextLine().toLowerCase();
+
+            
             jugarNuevaPartida = respuesta.equals("s");
         }
 

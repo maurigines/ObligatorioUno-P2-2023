@@ -85,6 +85,28 @@ public void actualizarTablero(Celda[][] elementos) {
         } while (!entradaValida);
         return valor;
     }
+    
+    public String[] leerMovimiento(String mensaje) {
+    int valor = 0;
+    boolean entradaValida = false;
+    String[] partes = null;
+    do {
+        try {
+            mostrarMensaje(mensaje);
+            String entrada = scanner.nextLine();
+           partes = entrada.split(" ");
+            if (partes.length != 2) {
+                mostrarMensaje("Entrada no válida. Debe ingresar filas y columnas separadas por un espacio.");
+                continue; // Volver a solicitar la entrada
+            }
+         
+            entradaValida = true;
+        } catch (NumberFormatException e) {
+            mostrarMensaje("Entrada no válida. Debe ingresar dos números enteros.");
+        }
+    } while (!entradaValida);
+    return partes;
+}
 
     public String leerCadena() {
         System.out.print("Ingrese una cadena: ");
