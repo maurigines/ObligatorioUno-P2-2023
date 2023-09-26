@@ -8,106 +8,75 @@ import java.util.Scanner;
 public class Sistema {
   
     
-    
     public static void main(String[] args) {
-         boolean jugarNuevaPartida = true; 
-         Scanner scanner = new Scanner(System.in);
-        
-       
-        ConsolaUI consolaUI = new ConsolaUI();
-        consolaUI.mostrarMensaje("-----------------------");
-        consolaUI.mostrarMensaje("Bienvenido a Soliflips!");
-        consolaUI.mostrarMensaje("-----------------------");
+    boolean jugarNuevaPartida = true;
+    Scanner scanner = new Scanner(System.in);
+
+    ConsolaUI consolaUI = new ConsolaUI();
+    consolaUI.mostrarMensaje("-----------------------");
+    consolaUI.mostrarMensaje("Bienvenido a Soliflips!");
+    consolaUI.mostrarMensaje("-----------------------");
+    consolaUI.mostrarMensaje(" ");
+
+    Tablero tablero = new Tablero();
+
+    while (jugarNuevaPartida) {
+        consolaUI.mostrarMensaje("Seleccione una opcion:");
+        consolaUI.mostrarMensaje("a) Tomar datos del archivo 'datos.txt'");
+        consolaUI.mostrarMensaje("b) Usar el tablero predefinido");
+        consolaUI.mostrarMensaje("c) Usar un tablero al azar");
         consolaUI.mostrarMensaje(" ");
         
-        
-        consolaUI.mostrarMensaje("Desea jugar una partida? (s/n)");
-        String respuesta = scanner.nextLine().toLowerCase();
-        jugarNuevaPartida = respuesta.equals("s");
-        Tablero tablero = new Tablero();
-        
-        
-        
-        
-        while (jugarNuevaPartida) {
-            consolaUI.mostrarMensaje("Seleccione una opcion:");
-            consolaUI.mostrarMensaje("a) Tomar datos del archivo 'datos.txt'");
-            consolaUI.mostrarMensaje("b) Usar el tablero predefinido");
-            consolaUI.mostrarMensaje("c) Usar un tablero al azar");
+        String opcion = scanner.nextLine().toLowerCase();
 
-            String opcion = scanner.nextLine().toLowerCase();
-
-            switch (opcion) {
-                case "a":
-                    
-                    tablero.cargarDatosDesdeArchivo();
-                    while (tablero.estaEnProgreso()) {
-                        
-                        consolaUI.mostrarMensaje("Estado actual del tablero:");
-                        consolaUI.actualizarTablero(tablero.getElementos());
-                        String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
-                        int fila = Integer.parseInt(coordenadas[0])-1 ;
-                        int columna = Integer.parseInt(coordenadas[1])-1;
-
-
-                        tablero.realizarMovimiento(fila, columna);
-                     consolaUI.mostrarMensaje(tablero.obtenerPasosNecesariosParaGanar());
-
-                            if (!tablero.estaEnProgreso()) {
-                                String resultado = tablero.mostrarResultado();
-                                consolaUI.mostrarMensaje(resultado);
-                            }
-                        }
-                         break;
-                
-                  
-                case "b":
-                    //ACA HAY QUE PONER EL PREDEFINIDO
-                    break;
-                case "c":
-                    
-                    int filas = consolaUI.leerEntero("Ingrese cantidad de filas: ");
-                    int columnas = consolaUI.leerEntero("Ingrese cantidad de Columnas: ");
-                    int nivel = consolaUI.leerEntero("Ingrese el nivel del juego: ");
-
-                    
-                    tablero.configurarJuego(filas, columnas, nivel);
-
-                    while (tablero.estaEnProgreso()) {
-                        
-                        consolaUI.mostrarMensaje("Estado actual del tablero:");
-                        consolaUI.actualizarTablero(tablero.getElementos());
-                        String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
-                        int fila = Integer.parseInt(coordenadas[0])-1 ;
-                        int columna = Integer.parseInt(coordenadas[1])-1;
-
-
-                        tablero.realizarMovimiento(fila, columna);
-                     consolaUI.mostrarMensaje(tablero.obtenerPasosNecesariosParaGanar());
-
-                            if (!tablero.estaEnProgreso()) {
-                                String resultado = tablero.mostrarResultado();
-                                consolaUI.mostrarMensaje(resultado);
-                            }
-                        }
-                         break;
-                default:
-                    consolaUI.mostrarMensaje("Opción no válida. Por favor, seleccione a, b o c.");
-                    break;
-            }
-
-           
-
-            // Preguntar si desea jugar una nueva partida
-            consolaUI.mostrarMensaje("Desea jugar una nueva partida? (s/n)");
-            respuesta = scanner.nextLine().toLowerCase();
-
-            
-            jugarNuevaPartida = respuesta.equals("s");
+        switch (opcion) {
+            case "a":
+                tablero.cargarDatosDesdeArchivo();
+                break;
+            case "b":
+                tablero.configurarTableroPredefinido();
+                break;
+            case "c":
+                int filas = consolaUI.leerEntero("Ingrese cantidad de filas: ");
+                int columnas = consolaUI.leerEntero("Ingrese cantidad de Columnas: ");
+                int nivel = consolaUI.leerEntero("Ingrese el nivel del juego: ");
+                consolaUI.mostrarMensaje(" ");
+                tablero.configurarJuego(filas, columnas, nivel);
+                break;
+            default:
+                consolaUI.mostrarMensaje("Opcion no valida. Por favor, seleccione a, b o c.");
+                consolaUI.mostrarMensaje(" ");
+                continue;
         }
 
-        consolaUI.cerrarScanner();
+        // En este codigo ahorramos el while y no repetimos para cada caso del Switch
+        while (tablero.estaEnProgreso()) {
+            consolaUI.mostrarMensaje("Estado actual del tablero:");
+            consolaUI.actualizarTablero(tablero.getElementos());
+            String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
+            int fila = Integer.parseInt(coordenadas[0]) - 1;
+            int columna = Integer.parseInt(coordenadas[1]) - 1;
+
+            tablero.realizarMovimiento(fila, columna);
+            consolaUI.mostrarMensaje(tablero.obtenerPasosNecesariosParaGanar());
+
+            if (!tablero.estaEnProgreso()) {
+                String resultado = tablero.mostrarResultado();
+                consolaUI.mostrarMensaje(resultado);
+            }
+        }
+
+        // Preguntar si desea jugar una nueva partida
+        consolaUI.mostrarMensaje("Desea jugar una nueva partida? (s/n)");
+        consolaUI.mostrarMensaje(" ");
+        String respuesta = scanner.nextLine().toLowerCase();
+
+        jugarNuevaPartida = respuesta.equals("s");
     }
+
+    consolaUI.cerrarScanner();
+}
+
 
     
 }
