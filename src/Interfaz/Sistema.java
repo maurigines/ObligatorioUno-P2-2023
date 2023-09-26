@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public class Sistema {
   
+    
+    
     public static void main(String[] args) {
          boolean jugarNuevaPartida = true; 
          Scanner scanner = new Scanner(System.in);
@@ -24,7 +26,7 @@ public class Sistema {
         jugarNuevaPartida = respuesta.equals("s");
         Tablero tablero = new Tablero();
         
-
+        
         
         
         while (jugarNuevaPartida) {
@@ -33,13 +35,32 @@ public class Sistema {
             consolaUI.mostrarMensaje("b) Usar el tablero predefinido");
             consolaUI.mostrarMensaje("c) Usar un tablero al azar");
 
-            String opcion = scanner.nextLine();
+            String opcion = scanner.nextLine().toLowerCase();
 
             switch (opcion) {
                 case "a":
                     
                     tablero.cargarDatosDesdeArchivo();
-                    break;
+                    while (tablero.estaEnProgreso()) {
+                        
+                        consolaUI.mostrarMensaje("Estado actual del tablero:");
+                        consolaUI.actualizarTablero(tablero.getElementos());
+                        String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
+                        int fila = Integer.parseInt(coordenadas[0])-1 ;
+                        int columna = Integer.parseInt(coordenadas[1])-1;
+
+
+                        tablero.realizarMovimiento(fila, columna);
+                     consolaUI.mostrarMensaje(tablero.obtenerPasosNecesariosParaGanar());
+
+                            if (!tablero.estaEnProgreso()) {
+                                String resultado = tablero.mostrarResultado();
+                                consolaUI.mostrarMensaje(resultado);
+                            }
+                        }
+                         break;
+                
+                  
                 case "b":
                     //ACA HAY QUE PONER EL PREDEFINIDO
                     break;

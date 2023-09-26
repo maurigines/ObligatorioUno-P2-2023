@@ -70,7 +70,7 @@ public void actualizarTablero(Celda[][] elementos) {
 
 
 
-
+    
     public int leerEntero(String mensaje) {
         int valor = 0;
         boolean entradaValida = false;

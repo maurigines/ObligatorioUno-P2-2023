@@ -323,7 +323,8 @@ private void cambiarColorCelda(int fila, int columna) {
         int filas = scanner.nextInt();
         int columnas = scanner.nextInt();
         scanner.nextLine(); // Consumir la línea en blanco después de los números
-
+       
+        
        
         configurarJuego(filas, columnas, 0);
 
@@ -331,8 +332,8 @@ private void cambiarColorCelda(int fila, int columna) {
         for (int fila = 0; fila < filas; fila++) {
             String filaTablero = scanner.nextLine();
             for (int columna = 0; columna < columnas; columna++) {
-                char simbolo = filaTablero.charAt(columna * 2); // Los símbolos están separados por un espacio
-                char color = filaTablero.charAt(columna * 2 + 1);
+                char simbolo = filaTablero.charAt(columna*3); // Los símbolos están separados por un espacio
+                char color = filaTablero.charAt(columna*3 + 1);
                 // Configurar la celda en la fila y columna correspondiente
                 getElementos()[fila][columna] = new Celda(simbolo, color);
             }
@@ -342,10 +343,10 @@ private void cambiarColorCelda(int fila, int columna) {
         int nivel = scanner.nextInt();
         scanner.nextLine(); // Consumir la línea en blanco después del nivel
 
-        // Establecer el nivel en el tablero
-        setNivel(nivel);
+        
+      
 
-        // Leer los pasos para la solución
+        // Leer los pasos para ganar
         while (scanner.hasNextInt()) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
@@ -355,7 +356,7 @@ private void cambiarColorCelda(int fila, int columna) {
         // Cerrar el scanner
         scanner.close();
     } catch (FileNotFoundException e) {
-        System.err.println("El archivo 'datos.txt' no se encontró en la ubicación especificada.");
+        System.err.println("El archivo 'datos.txt' no se encontro en la ubicacion especificada.");
     }
 }
 
