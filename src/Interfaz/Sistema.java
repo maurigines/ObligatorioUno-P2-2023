@@ -22,7 +22,7 @@ public class Sistema {
         consolaUI.mostrarMensaje("Desea jugar una partida? (s/n)");
         String respuesta = scanner.nextLine().toLowerCase();
         jugarNuevaPartida = respuesta.equals("s");
-        
+        Tablero tablero = new Tablero();
         
 
         
@@ -37,13 +37,11 @@ public class Sistema {
 
             switch (opcion) {
                 case "a":
-                    // Cargar datos desde el archivo 'datos.txt' (implementa esta opción)
-                    // Luego configura el juego y juega
-                    // Ejemplo: cargarDatosDesdeArchivo(consolaUI, tablero);
+                    
+                    tablero.cargarDatosDesdeArchivo();
                     break;
                 case "b":
-                    // Configura el tablero predefinido y juega
-                    // Ejemplo: configurarTableroPredefinido(consolaUI, tablero);
+                    //ACA HAY QUE PONER EL PREDEFINIDO
                     break;
                 case "c":
                     
@@ -51,7 +49,7 @@ public class Sistema {
                     int columnas = consolaUI.leerEntero("Ingrese cantidad de Columnas: ");
                     int nivel = consolaUI.leerEntero("Ingrese el nivel del juego: ");
 
-                    Tablero tablero = new Tablero();
+                    
                     tablero.configurarJuego(filas, columnas, nivel);
 
                     while (tablero.estaEnProgreso()) {
@@ -59,8 +57,8 @@ public class Sistema {
                         consolaUI.mostrarMensaje("Estado actual del tablero:");
                         consolaUI.actualizarTablero(tablero.getElementos());
                         String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
-                        int fila = Integer.parseInt(coordenadas[0]) - 1;
-                        int columna = Integer.parseInt(coordenadas[1]) - 1;
+                        int fila = Integer.parseInt(coordenadas[0])-1 ;
+                        int columna = Integer.parseInt(coordenadas[1])-1;
 
 
                         tablero.realizarMovimiento(fila, columna);

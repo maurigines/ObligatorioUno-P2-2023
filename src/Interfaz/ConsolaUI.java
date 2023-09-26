@@ -94,12 +94,16 @@ public void actualizarTablero(Celda[][] elementos) {
         try {
             mostrarMensaje(mensaje);
             String entrada = scanner.nextLine();
-           partes = entrada.split(" ");
+            partes = entrada.split(" ");
             if (partes.length != 2) {
                 mostrarMensaje("Entrada no válida. Debe ingresar filas y columnas separadas por un espacio.");
                 continue; // Volver a solicitar la entrada
             }
-         
+
+            // Validar que ambas partes sean números enteros (positivos o negativos)
+            int fila = Integer.parseInt(partes[0]);
+            int columna = Integer.parseInt(partes[1]);
+            
             entradaValida = true;
         } catch (NumberFormatException e) {
             mostrarMensaje("Entrada no válida. Debe ingresar dos números enteros.");

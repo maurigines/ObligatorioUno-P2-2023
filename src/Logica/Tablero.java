@@ -1,7 +1,10 @@
 package Logica;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 // Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(PONER NUMERO)
 public class Tablero {
@@ -20,17 +23,16 @@ public class Tablero {
   
     
     public void configurarJuego(int filas, int columnas, int nivel) {
-        this.numFilas = filas;
-        this.numColumnas = columnas;
-        this.nivel = nivel;
-    
-        this.pasosActuales = 0;
-        this.juegoGanado = false;
-        this.juegoEnProgreso = true;
-        this.tiempoInicio = System.currentTimeMillis() / 1000;
+    this.numFilas = filas;
+    this.numColumnas = columnas;
+    this.nivel = nivel;
+    this.pasosActuales = 0;
+    this.juegoGanado = false;
+    this.juegoEnProgreso = true;
+    this.tiempoInicio = System.currentTimeMillis() / 1000;
 
-        generarTableroAleatorio(filas, columnas, nivel);
-    }
+    generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel aquí
+}
 
     public boolean estaEnProgreso() {
         return juegoEnProgreso;
@@ -41,6 +43,19 @@ public class Tablero {
     }
 
  public void realizarMovimiento(int fila, int columna) {
+    if (fila == -2 && columna == -2) {
+        // Realizar el último movimiento almacenado en coordenadasAleatorias
+        if (!coordenadasAleatorias.isEmpty()) {
+            Coordenada ultimoMovimiento = coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
+            fila = ultimoMovimiento.getFila();
+            columna = ultimoMovimiento.getColumna();
+        } else {
+            // Si no hay movimientos almacenados, el juego continúa normalmente
+            return;
+        }
+    }
+
+    if (movimientoValido(fila, columna)) {
         if (movimientoValido(fila, columna)) {
             // Actualizar el tablero después de cada movimiento
             cambiarColor(fila, columna);
@@ -58,6 +73,7 @@ public class Tablero {
             pasosActuales++;
         }
     }
+ }
 
 
 
@@ -298,4 +314,52 @@ private void cambiarColorCelda(int fila, int columna) {
     }
 
   
+    
+   public void cargarDatosDesdeArchivo() {
+    try {
+        Scanner scanner = new Scanner(new File(".\\Test\\datos.txt"));
+
+        // Leer el número de filas y columnas
+        int filas = scanner.nextInt();
+        int columnas = scanner.nextInt();
+        scanner.nextLine(); // Consumir la línea en blanco después de los números
+
+       
+        configurarJuego(filas, columnas, 0);
+
+        // Leer el tablero
+        for (int fila = 0; fila < filas; fila++) {
+            String filaTablero = scanner.nextLine();
+            for (int columna = 0; columna < columnas; columna++) {
+                char simbolo = filaTablero.charAt(columna * 2); // Los símbolos están separados por un espacio
+                char color = filaTablero.charAt(columna * 2 + 1);
+                // Configurar la celda en la fila y columna correspondiente
+                getElementos()[fila][columna] = new Celda(simbolo, color);
+            }
+        }
+
+        // Leer el nivel
+        int nivel = scanner.nextInt();
+        scanner.nextLine(); // Consumir la línea en blanco después del nivel
+
+        // Establecer el nivel en el tablero
+        setNivel(nivel);
+
+        // Leer los pasos para la solución
+        while (scanner.hasNextInt()) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            //ACA ESTO HAY QUE ALMACENAR
+        }
+
+        // Cerrar el scanner
+        scanner.close();
+    } catch (FileNotFoundException e) {
+        System.err.println("El archivo 'datos.txt' no se encontró en la ubicación especificada.");
+    }
 }
+
+
+    
+}
+
