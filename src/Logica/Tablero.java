@@ -186,8 +186,10 @@ public class Tablero {
 
 
 public String obtenerPasosNecesariosParaGanar() {
+    
     StringBuilder sb = new StringBuilder("Los pasos necesarios para ganar son: ");
     
+    //ESTO HAY QUE HACERLO BIEN
     for (int i = 0; i < coordenadasAleatorias.size(); i++) {
         Coordenada coordenada = coordenadasAleatorias.get(i);
         int fila = coordenada.getFila() + 1; // Incrementa en 1
