@@ -5,14 +5,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
 
 // Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(PONER NUMERO)
 public class Tablero {
 
     private Celda[][] elementos;
-    private Celda[][] tableroAnterior;
     private ArrayList<Coordenada> coordenadasAleatorias = new ArrayList<>();
-    private ArrayList<Coordenada> movimientosRealizados = new ArrayList<>();
+   // private ArrayList<Coordenada> movimientosRealizados = new ArrayList<>();
+    private Stack<Coordenada> movimientosRealizados = new Stack<>();
     private int numFilas;
     private int numColumnas;
     private int nivel;
@@ -31,7 +32,8 @@ public class Tablero {
     this.juegoGanado = false;
     this.juegoEnProgreso = true;
     this.tiempoInicio = System.currentTimeMillis() / 1000;
-
+    
+    
     generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel aquí
 }
 
@@ -43,67 +45,46 @@ public class Tablero {
         juegoEnProgreso = false;
     }
 
- public void realizarMovimiento(int fila, int columna, String opcion) {
-    copiarTableroActualATableroAnterior();
-    if ("X".equalsIgnoreCase(opcion)) {
-        terminarJuego();
-    } else if ("H".equalsIgnoreCase(opcion)) {
-        mostrarHistoriaMovimientos();
-    } else if ("S".equalsIgnoreCase(opcion)) {
-        mostrarSecuenciaMovimientos();
-    } else {
-        if (fila == -1 && columna == -1) {
-            // Realizar el último movimiento almacenado en coordenadasAleatorias
-            if (!coordenadasAleatorias.isEmpty()) {
-                Coordenada ultimoMovimiento = coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
-                fila = ultimoMovimiento.getFila();
-                columna = ultimoMovimiento.getColumna();
-            } else {
-                // Si no hay movimientos almacenados, el juego continúa normalmente
-                return;
-            }
-        }
-
-        // Verificar que la fila y la columna estén en el rango correcto (-1 a 9)
-        if ((fila < -2 || fila > 9) || (columna < -2 || columna > 9)) {
-            // Si no están en el rango correcto, el movimiento es inválido
-            System.out.println("Movimiento inválido: fila y columna deben estar entre -1 y 9.");
+ public void realizarMovimiento(int fila, int columna) {
+    if (fila == -1 && columna == -1) {
+        // Deshacer el último movimiento almacenado en movimientosRealizados
+        if (!movimientosRealizados.isEmpty()) {
+            Coordenada ultimoMovimiento = movimientosRealizados.remove(movimientosRealizados.size() - 1);
+            fila = ultimoMovimiento.getFila();
+            columna = ultimoMovimiento.getColumna();
+            deshacerMovimiento(fila, columna); 
+        } else {
+            // Si no hay movimientos almacenados, el juego continúa normalmente
             return;
         }
+    }
 
-        if (movimientoValido(fila, columna)) {
-            // Actualizar el tablero después de cada movimiento
-            cambiarColor(fila, columna);
+    if (movimientoValido(fila, columna)) {
+        // Actualizar el tablero después de cada movimiento
+        cambiarColor(fila, columna);
 
-            Coordenada movimientoRealizado = new Coordenada(fila+1, columna+1);
+        Coordenada movimientoRealizado = new Coordenada(fila, columna);
+        movimientosRealizados.push(movimientoRealizado);
 
-            // Almacena el movimiento en la historia de movimientos realizados
-            movimientosRealizados.add(movimientoRealizado);
+        // Agregar aquí la lógica para controlar los movimientos si es necesario
 
-            boolean gane = verificarVictoria();
-            if (gane) {
-                juegoGanado = true;
-                terminarJuego();
-            }
-            pasosActuales++;
+        boolean gane = verificarVictoria();
+        if (gane) {
+            juegoGanado = true;
+            terminarJuego();
         }
+        pasosActuales++;
     }
 }
 
 
 
-public void mostrarHistoriaMovimientos() {
-    System.out.println("Historia de movimientos realizados:");
-    for (Coordenada movimiento : movimientosRealizados) {
-        System.out.println("(" + (movimiento.getFila() + 1) + ", " + (movimiento.getColumna() + 1) + ")");
-    }
-}
 
-public void mostrarSecuenciaMovimientos() {
-    
-    System.out.println("Secuencia de movimientos hacia la solución:");
-    // TERMINAR METODO
-}
+
+
+
+
+
 
     public String mostrarResultado() {
         long tiempoFin = System.currentTimeMillis() / 1000;
@@ -114,20 +95,6 @@ public void mostrarSecuenciaMovimientos() {
 
         return resultado;
     }
-    
-    public Celda[][] getTableroAnterior() {
-    return tableroAnterior;
-}
-    
-    public void reiniciarTablero() {
-    generarTableroAleatorio(numFilas, numColumnas, nivel);
-    pasosActuales = 0;
-    juegoGanado = false;
-    juegoEnProgreso = true;
-    tiempoInicio = System.currentTimeMillis() / 1000;
-}
-
-
 
     public void setNivel(int nivel) {
         this.nivel = nivel;
@@ -205,16 +172,7 @@ public void mostrarSecuenciaMovimientos() {
 
     // Realizar los movimientos aleatorios después de haber generado todas las coordenadas
     for (Coordenada coordenada : coordenadasAleatorias) {
-        realizarMovimiento(coordenada.getFila(), coordenada.getColumna(), null);
-    }
-}
-
-    private void copiarTableroActualATableroAnterior() {
-    tableroAnterior = new Celda[numFilas][numColumnas];
-    for (int fila = 0; fila < numFilas; fila++) {
-        for (int columna = 0; columna < numColumnas; columna++) {
-            tableroAnterior[fila][columna] = new Celda(elementos[fila][columna].getSimbolo(), elementos[fila][columna].getColor());
-        }
+        realizarMovimiento(coordenada.getFila(), coordenada.getColumna());
     }
 }
 
@@ -353,14 +311,53 @@ private void cambiarColorCelda(int fila, int columna) {
     public boolean movimientoValido(int fila, int columna) {
         boolean esValido = true;
         if (fila < 0 || fila >= numFilas || columna < 0 || columna >= numColumnas) {
-            esValido = false; // Movimiento fuera de los límites del tablero
+            esValido = false; // Movimiento fuera de los límites del tablero o  va hacia atras
         }
 
        
         return esValido; // Si el movimiento es válido según las reglas
     }
+    
+    
+private void deshacerMovimiento(int fila, int columna) {
+    if (!movimientosRealizados.isEmpty()) {
+        // Acá saco la última coordenada realizada
+        Coordenada ultimoMovimiento = movimientosRealizados.pop();
+        fila = ultimoMovimiento.getFila();
+        columna = ultimoMovimiento.getColumna();    
+        
+        //sacar la celda en al pos (fil.col)
+        Celda celda = elementos[fila][columna];
+        
+        // Revertir el cambio de color de la celda
+        char nuevoColor = (celda.getColor() == 'R') ? 'A' : 'R';
+        celda.setColor(nuevoColor);
 
-  
+        // Actualizar el color en las celdas relacionadas si es necesario
+        char simbolo = celda.getSimbolo();
+        if (simbolo == '/') {
+            // Revertir cambios relacionados con el símbolo '/'
+            // Por ejemplo, cambiar el color de las celdas en las diagonales
+            cambiarColorDiagonalInversa(fila, columna, nuevoColor);
+            cambiarColorDiagonal(fila, columna, nuevoColor);
+        } else if (simbolo == '\\') {
+            // Revertir cambios relacionados con el símbolo '\'
+            // Por ejemplo, cambiar el color de las celdas en las diagonales inversas
+            cambiarColorDiagonal(fila, columna, nuevoColor);
+            cambiarColorDiagonalInversa(fila, columna, nuevoColor);
+        } else if (simbolo == '-') {
+            // Revertir cambios relacionados con el símbolo '-'
+            // Por ejemplo, cambiar el color de las celdas en la misma fila
+            cambiarColorFila(fila, columna, nuevoColor);
+        } else if (simbolo == '|') {
+            // Revertir cambios relacionados con el símbolo '|'
+            // Por ejemplo, cambiar el color de las celdas en la misma columna
+            cambiarColorColumna(fila, columna, nuevoColor);
+        }
+    } else{
+        System.out.println("No hay movimientos para deshacer.");
+    }
+}
     
    public void cargarDatosDesdeArchivo() {
     try {
@@ -452,6 +449,8 @@ private void cambiarColorCelda(int fila, int columna) {
 
     // ACA TENEMOS QUE HACER LA LOGICA Y ALMACENAR LOS DATOS DE MOVIMIENTOS
 }
+
+
 
     
 }
