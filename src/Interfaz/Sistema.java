@@ -1,8 +1,7 @@
 package Interfaz;
 
+
 import Logica.Tablero;
-import Logica.Celda;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Sistema {
@@ -15,8 +14,8 @@ public class Sistema {
         consolaUI.mostrarMensaje("Bienvenido a Soliflips!");
         consolaUI.mostrarMensaje("-----------------------");
         consolaUI.mostrarMensaje(" ");
-        
-        consolaUI.mostrarMensaje("Desea jugar una  partida? (s/n)");
+
+        consolaUI.mostrarMensaje("Desea jugar una partida? (s/n)");
         consolaUI.mostrarMensaje(" ");
         String respuesta = scanner.nextLine().toLowerCase();
         consolaUI.mostrarMensaje(" ");
@@ -24,7 +23,6 @@ public class Sistema {
         consolaUI.mostrarMensaje(" ");
 
         Tablero tablero = new Tablero();
-        Celda[][] tableroAnterior = tablero.getElementos(); // Almacenar el tablero anterior
 
         while (jugarNuevaPartida) {
             consolaUI.mostrarMensaje("Seleccione una opcion:");
@@ -57,54 +55,41 @@ public class Sistema {
 
             // Bucle while que actualiza los tableros
             consolaUI.primeraVez = true;
+           
             while (tablero.estaEnProgreso()) {
+                // Mostrar el tablero antes de que el jugador ingrese un movimiento
                 if (consolaUI.primeraVez) {
-        // Crear una copia independiente del tablero actual
-        tableroAnterior = new Celda[tablero.getElementos().length][];
-        for (int i = 0; i < tablero.getElementos().length; i++) {
-            tableroAnterior[i] = new Celda[tablero.getElementos()[i].length];
-            for (int j = 0; j < tablero.getElementos()[i].length; j++) {
-                char simboloActual = tablero.getElementos()[i][j].getSimbolo();
-                char colorActual = tablero.getElementos()[i][j].getColor();
-                tableroAnterior[i][j] = new Celda(simboloActual, colorActual);
-            }
-        }
-        
-        consolaUI.actualizarTablero(tablero.getElementos());
-        consolaUI.primeraVez = false;
-    } else {
-        consolaUI.mostrarTableros(tableroAnterior, tablero.getElementos());
-    }
-
-                String[] coordenadas = consolaUI.leerMovimiento("Ingrese las coordenadas separadas por un espacio");
-                int fila = Integer.parseInt(coordenadas[0]) - 1;
-                int columna = Integer.parseInt(coordenadas[1]) - 1;
-                
-              
-                tablero.realizarMovimiento(fila, columna);
-               tableroAnterior = new Celda[tablero.getElementos().length][];
-    for (int i = 0; i < tablero.getElementos().length; i++) {
-        tableroAnterior[i] = Arrays.copyOf(tablero.getElementos()[i], tablero.getElementos()[i].length);
-    }
-                
-                                
-                if (!tablero.estaEnProgreso()) {
-                    String resultado = tablero.mostrarResultado();
-                    consolaUI.mostrarMensaje(resultado);
+                    consolaUI.actualizarTablero(tablero.getElementos());
+                    consolaUI.primeraVez = false;
+                } else {
+                    consolaUI.mostrarTableros(tablero.getTableroAnterior(), tablero.getElementos());
                 }
-                // Actualizar el tablero anterior después de cada movimiento
-              
+
+                String opcionMovimiento = scanner.nextLine();
+                int fila = consolaUI.obtenerFilaDesdeEntrada(opcionMovimiento);
+                int columna = consolaUI.obtenerColumnaDesdeEntrada(opcionMovimiento);
+                String opcionMovimientoSinEspacios = opcionMovimiento.replace(" ", ""); // Eliminar espacios en blanco
+                opcion = consolaUI.obtenerOpcionDesdeEntrada(opcionMovimientoSinEspacios);
+
+                // Realizar el movimiento
+                tablero.realizarMovimiento(fila - 1, columna -1, opcion);
+                 System.out.println(fila + " " + columna);
             }
 
-            // Preguntar si desea jugar una nueva partida
-            jugarNuevaPartida = false;
-            consolaUI.mostrarMensaje("Desea jugar una nueva partida? (s/n)");
             consolaUI.mostrarMensaje(" ");
+            consolaUI.mostrarMensaje("El juego ha terminado.");
+            consolaUI.mostrarMensaje(tablero.mostrarResultado());
+            consolaUI.mostrarMensaje("Desea jugar otra partida? (s/n)");
             respuesta = scanner.nextLine().toLowerCase();
-
             jugarNuevaPartida = respuesta.equals("s");
+
+            if (jugarNuevaPartida) {
+                tablero.reiniciarTablero();
+            }
         }
 
-        consolaUI.cerrarScanner();
+        consolaUI.mostrarMensaje("Gracias por jugar a Soliflips. Hasta luego!");
     }
+
+    // Agrega aquí las funciones obtenerFilaDesdeEntrada, obtenerColumnaDesdeEntrada y obtenerOpcionDesdeEntrada
 }

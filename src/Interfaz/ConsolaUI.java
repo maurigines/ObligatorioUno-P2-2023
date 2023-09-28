@@ -65,7 +65,7 @@ public class ConsolaUI {
         System.out.println();
     }
 
-    public void mostrarTableros(Celda[][] tableroAnterior, Celda[][] tableroActual) {
+   public void mostrarTableros(Celda[][] tableroAnterior, Celda[][] tableroActual) {
     int numRows = tableroActual.length;
     int numCols = tableroActual[0].length;
 
@@ -178,6 +178,72 @@ public class ConsolaUI {
 
         return partes;
     }
+
+   public static int obtenerFilaDesdeEntrada(String entrada) {
+    int fila = 0;  // Valor predeterminado en caso de no encontrar una fila válida
+
+    if ("-1 -1".equals(entrada)) {
+        return -1;  // Si la entrada es "-1 -1", devuelve directamente -1
+    }
+
+    if (entrada.matches("\\d+ \\d+")) {
+        String[] partes = entrada.split(" ");
+        int filaStr = Integer.parseInt(partes[0]);
+        int columnaStr = Integer.parseInt(partes[1]);
+
+        fila = filaStr;
+    } else if (entrada.length() == 1 && Character.isLetter(entrada.charAt(0))) {
+        char letra = entrada.charAt(0);
+        if (letra >= 'a' && letra <= 'z') {
+            fila = letra - 'a' + 'A';  // Convierte a mayúscula
+        } else if (letra >= 'A' && letra <= 'Z') {
+            fila = letra;
+        }
+    }
+
+    return fila;
+}
+
+public static int obtenerColumnaDesdeEntrada(String entrada) {
+    int columna = 0;  // Valor predeterminado en caso de no encontrar una columna válida
+
+    if ("-1 -1".equals(entrada)) {
+        return -1;  // Si la entrada es "-1 -1", devuelve directamente -1
+    }
+
+    if (entrada.matches("\\d+ \\d+")) {
+        String[] partes = entrada.split(" ");
+        int filaStr = Integer.parseInt(partes[0]);
+        int columnaStr = Integer.parseInt(partes[1]);
+
+        columna = columnaStr;
+    } else if (entrada.length() == 1 && Character.isLetter(entrada.charAt(0))) {
+        char letra = entrada.charAt(0);
+        if (letra >= 'a' && letra <= 'z') {
+            columna = letra - 'a' + 'A';  // Convierte a mayúscula
+        } else if (letra >= 'A' && letra <= 'Z') {
+            columna = letra;
+        }
+    }
+
+    return columna;
+}
+
+public static String obtenerOpcionDesdeEntrada(String entrada) {
+    // Obtén el último carácter de la entrada como opción
+    if (entrada.length() == 1) {
+        char opcion = entrada.charAt(0);
+        if (opcion >= 'a' && opcion <= 'z') {
+            return Character.toString(opcion).toUpperCase();  // Convierte a mayúscula
+        } else if (opcion >= 'A' && opcion <= 'Z') {
+            return Character.toString(opcion);
+        }
+    }
+
+    // Si no se pudo encontrar una opción válida, devuelve una cadena vacía
+    return "";
+}
+
 
     public void cerrarScanner() {
         scanner.close();
