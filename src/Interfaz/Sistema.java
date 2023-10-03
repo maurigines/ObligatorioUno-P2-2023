@@ -49,9 +49,21 @@ public class Sistema {
                     tablero.copiarTableroActualATableroAnterior();
                     break;
                 case "c":
-                    int filas = consolaUI.leerEntero("Ingrese cantidad de filas: ");
-                    int columnas = consolaUI.leerEntero("Ingrese cantidad de Columnas: ");
-                    int nivel = consolaUI.leerEntero("Ingrese el nivel del juego: ");
+                    int filas,
+                     columnas,
+                     nivel;
+
+                    do {
+                        filas = consolaUI.leerEntero("Ingrese la cantidad de filas (entre 3 y 9): ");
+                    } while (filas < 3 || filas > 9);
+
+                    do {
+                        columnas = consolaUI.leerEntero("Ingrese la cantidad de columnas (entre 3 y 9): ");
+                    } while (columnas < 3 || columnas > 9);
+
+                    do {
+                        nivel = consolaUI.leerEntero("Ingrese el nivel (entre 1 y 8): ");
+                    } while (nivel < 1 || nivel > 8);
                     consolaUI.mostrarMensaje(" ");
                     tablero.configurarJuego(filas, columnas, nivel);
                     break;
@@ -134,7 +146,9 @@ public class Sistema {
             }
 
             if (jugarNuevaPartida) {
+                tablero.limpiarHistoriales();
                 tablero.reiniciarTablero();
+                
             }
         }
 

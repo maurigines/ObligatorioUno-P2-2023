@@ -103,9 +103,11 @@ public class ConsolaUI {
             String resetColor = "\u001B[0m"; // Restablece el color después del carácter
             System.out.print(" " + colorCodeAnterior + simboloAnterior + resetColor + " |");
         }
-
+        if (fila < numRows) {
+            System.out.print("  ==>");
+        }else{
         System.out.print("     "); // Espacio entre los dos tableros
-
+        }
         // Número de fila alineado a la derecha para el tablero actual
         System.out.printf("%2d|", fila + 1);
         for (int columna = 0; columna < numCols; columna++) {

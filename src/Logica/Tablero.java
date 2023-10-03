@@ -3,6 +3,7 @@ package Logica;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -77,16 +78,25 @@ public class Tablero {
 
 
 
-    public void almacenarMovimientoRealizado(int fila, int columna){
-        
-        if(fila > 0 && columna > 0){
-        Coordenada movimientoRealizado = new Coordenada(fila, columna);
-        // Almacena el movimiento en la historia de movimientos realizados
-        movimientosRealizados.add(movimientoRealizado);
-         if (!coordenadasAleatorias.isEmpty() && coordenadasAleatorias.get(coordenadasAleatorias.size() - 1) == movimientoRealizado) {
-            coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1); // Eliminar el último elemento si es igual al movimiento realizado
-          }
-    }
+    public void almacenarMovimientoRealizado(int fila, int columna) {
+        if (fila > 0 && columna > 0) {
+            Coordenada movimientoRealizado = new Coordenada(fila, columna);
+            movimientosRealizados.add(movimientoRealizado);
+            if (!coordenadasAleatorias.isEmpty()) {
+                Coordenada ultimaCoordenada = coordenadasAleatorias.get(coordenadasAleatorias.size() - 1);
+                if (ultimaCoordenada.equals(movimientoRealizado)) {
+                    // El movimiento coincide con la última coordenada en coordenadasAleatorias, elimínala y no lo agregues a movimientosRealizados.
+                    coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
+                } else {
+                    // El movimiento no coincide, agrégalo a movimientosRealizados y también en coordenadasAleatorias.
+                    coordenadasAleatorias.add(movimientoRealizado);
+                }
+            }
+        }
+    
+
+    
+
     
     }
     public String mostrarHistoriaMovimientos() {
@@ -101,7 +111,8 @@ public class Tablero {
         String secuenciaSolucion = "";
         caminoSolucion.clear(); // Vaciar caminoSolucion
         caminoSolucion.addAll(coordenadasAleatorias);
-        caminoSolucion.addAll(movimientosRealizados);
+        Collections.reverse(caminoSolucion);
+        
         
         for (Coordenada pasoSolucion : caminoSolucion){
             secuenciaSolucion += ("(" + (pasoSolucion.getFila()) + ", " + (pasoSolucion.getColumna()) + ")" +" ");
@@ -114,7 +125,7 @@ public class Tablero {
         long tiempoFin = System.currentTimeMillis() / 1000;
         long tiempoTotal = tiempoFin - tiempoInicio;
 
-        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en "   + " y en " + (pasosActuales-nivel) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
+        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en "   + " y en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
         resultado += "Tiempo total de la partida: " + tiempoTotal + " segundos";
 
         return resultado;
@@ -199,14 +210,15 @@ public class Tablero {
     }
 
     // Generar coordenadas aleatorias para movimientos
-    for (int i = 0; i < nivel; i++) {
-        Coordenada coordenada = obtenerCoordenadasAleatorias();
+    while (coordenadasAleatorias.size() < nivel) {
+        Coordenada coordenada = obtenerCoordenadasAleatorias(coordenadasAleatorias);
         coordenadasAleatorias.add(coordenada);
     }
 
     // Realizar los movimientos aleatorios después de haber generado todas las coordenadas
     for (Coordenada coordenada : coordenadasAleatorias) {
-        realizarMovimiento(coordenada.getFila(), coordenada.getColumna());
+        realizarMovimiento(coordenada.getFila()-1, coordenada.getColumna()-1);
+        pasosActuales = 0;
     }
 }
 
@@ -220,14 +232,28 @@ public class Tablero {
 }
 
     
-   public Coordenada obtenerCoordenadasAleatorias() {
-       
-       //HAY QUE CONTROLAR QUE NO SE GENEREN DOS VECES LA MISMA COORDENADA.
-    Random random = new Random();
-    int fila = random.nextInt(numFilas); // Genera un número aleatorio entre 0 y numFilas-1
-    int columna = random.nextInt(numColumnas); // Genera un número aleatorio entre 0 y numColumnas-1
-    return new Coordenada(fila, columna);
-}
+    public Coordenada obtenerCoordenadasAleatorias(ArrayList<Coordenada> coordenadasAleatorias) {
+        Random random = new Random();
+        Coordenada coordenada;
+        boolean coordenadaUnica;
+
+        do {
+            int fila = random.nextInt(numFilas) + 1; // Genera un número entre 1 y numFilas inclusive
+            int columna = random.nextInt(numColumnas) + 1; // Genera un número entre 1 y numColumnas inclusive
+            coordenada = new Coordenada(fila, columna);
+
+            // Verifica si la coordenada es única
+            coordenadaUnica = true;
+            for (Coordenada existente : coordenadasAleatorias) {
+                if (existente.equals(coordenada)) {
+                    coordenadaUnica = false;
+                    break;
+                }
+            }
+        } while (!coordenadaUnica);
+
+        return coordenada;
+    }
 
 
 
@@ -308,11 +334,11 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
 
 
 
-private void cambiarColorCelda(int fila, int columna) {
-    Celda celda = elementos[fila][columna];
-    char nuevoColor = (celda.getColor() == 'R') ? 'A' : 'R';
-    celda.setColor(nuevoColor);
-}
+    private void cambiarColorCelda(int fila, int columna) {
+        Celda celda = elementos[fila][columna];
+        char nuevoColor = (celda.getColor() == 'R') ? 'A' : 'R';
+        celda.setColor(nuevoColor);
+    }
 
 
     public int getNumFilas() {
@@ -370,7 +396,8 @@ private void cambiarColorCelda(int fila, int columna) {
         while (scanner.hasNextInt()) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
-            //ACA ESTO HAY QUE ALMACENAR
+            Coordenada coordenada = new Coordenada(x, y);
+            coordenadasAleatorias.add(coordenada);
         }
 
         // Cerrar el scanner
@@ -425,6 +452,11 @@ private void cambiarColorCelda(int fila, int columna) {
 
     // ACA TENEMOS QUE HACER LA LOGICA Y ALMACENAR LOS DATOS DE MOVIMIENTOS
 }
+   
+   public void limpiarHistoriales(){
+       coordenadasAleatorias.clear();
+       movimientosRealizados.clear();
+   }
 
     
 }
