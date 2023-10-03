@@ -17,11 +17,17 @@ public class Sistema {
 
         consolaUI.mostrarMensaje("Desea jugar una partida? (s/n)");
         consolaUI.mostrarMensaje(" ");
-        String respuesta = scanner.nextLine().toLowerCase();
+       String respuesta = scanner.nextLine().toLowerCase();
         consolaUI.mostrarMensaje(" ");
-        jugarNuevaPartida = respuesta.equals("s");
-        consolaUI.mostrarMensaje(" ");
-
+        
+        while (!(respuesta.equals("s") || respuesta.equals("n"))) {
+            consolaUI.mostrarMensaje("Ingrese una respuesta valida s/n ");
+            respuesta = scanner.nextLine().toLowerCase();
+            jugarNuevaPartida = respuesta.equals("s");
+            consolaUI.mostrarMensaje(" ");
+           
+            
+        }
         Tablero tablero = new Tablero();
 
         while (jugarNuevaPartida) {
@@ -36,9 +42,11 @@ public class Sistema {
             switch (opcion) {
                 case "a":
                     tablero.cargarDatosDesdeArchivo();
+                    tablero.copiarTableroActualATableroAnterior();
                     break;
                 case "b":
                     tablero.configurarTableroPredefinido();
+                    tablero.copiarTableroActualATableroAnterior();
                     break;
                 case "c":
                     int filas = consolaUI.leerEntero("Ingrese cantidad de filas: ");
@@ -66,15 +74,50 @@ public class Sistema {
                 }
 
                 String opcionMovimiento = scanner.nextLine();
-                int fila = consolaUI.obtenerFilaDesdeEntrada(opcionMovimiento);
-                int columna = consolaUI.obtenerColumnaDesdeEntrada(opcionMovimiento);
-                String opcionMovimientoSinEspacios = opcionMovimiento.replace(" ", ""); // Eliminar espacios en blanco
-                opcion = consolaUI.obtenerOpcionDesdeEntrada(opcionMovimientoSinEspacios);
+                int fila = 0;
+                int columna = 0; 
+               
+                if (opcionMovimiento.length() == 1 && Character.isLetter(opcionMovimiento.charAt(0))) {
+                    char letra = opcionMovimiento.toUpperCase().charAt(0);
 
-                // Realizar el movimiento
-                tablero.realizarMovimiento(fila - 1, columna -1, opcion);
-                 System.out.println(fila + " " + columna);
+                    // Realizar acciones basadas en la letra ingresada
+                    switch (letra) {
+                        case 'X': 
+                            tablero.terminarJuego();
+                            break;
+                        case 'H':
+                            consolaUI.mostrarMensaje(tablero.mostrarHistoriaMovimientos());
+                            break;
+                        case 'S':
+                           consolaUI.mostrarMensaje(tablero.mostrarSecuenciaMovimientos());
+                            break;
+                        default:
+                            consolaUI.mostrarMensaje("Opción invalida para la letra ingresada.");
+                    }
+                } // Verificar si la entrada es un número
+                else if (consolaUI.esNumero(opcionMovimiento)) {
+                    int numero = Integer.parseInt(opcionMovimiento);
+                    fila = numero;
+                    columna = consolaUI.leerEntero("");
+                    if((-1<= fila && fila <= tablero.getNumFilas()) && (-1<= columna && columna <= tablero.getNumColumnas())){
+                    tablero.realizarMovimiento(fila - 1, columna -1);
+                    tablero.almacenarMovimientoRealizado(fila, columna);
+                    } else{
+                        consolaUI.mostrarMensaje("Entrada invalida, ingrese una entrada acorde a " + tablero.getNumFilas()+" filas y " + tablero.getNumColumnas() + " columnas");
+                    }
+                    
+                } // Opción inválida
+                else {
+                    System.out.println("Opción inválida.");
+                }
+
+               
             }
+
+                
+               
+                
+            
 
             consolaUI.mostrarMensaje(" ");
             consolaUI.mostrarMensaje("El juego ha terminado.");
@@ -82,6 +125,13 @@ public class Sistema {
             consolaUI.mostrarMensaje("Desea jugar otra partida? (s/n)");
             respuesta = scanner.nextLine().toLowerCase();
             jugarNuevaPartida = respuesta.equals("s");
+            while (!(respuesta.equals("s") || respuesta.equals("n"))) {
+                consolaUI.mostrarMensaje("Ingrese una respuesta valida s/n ");
+                respuesta = scanner.nextLine().toLowerCase();
+                jugarNuevaPartida = respuesta.equals("s");
+                consolaUI.mostrarMensaje(" ");
+
+            }
 
             if (jugarNuevaPartida) {
                 tablero.reiniciarTablero();

@@ -146,104 +146,22 @@ public class ConsolaUI {
                 valor = Integer.parseInt(scanner.nextLine());
                 entradaValida = true;
             } catch (NumberFormatException e) {
-                System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+                System.out.println("Entrada no valida. Por favor, ingrese un numero entero.");
             }
         } while (!entradaValida);
         return valor;
     }
 
-    public String[] leerMovimiento(String mensaje) {
-        String[] partes = null;
-        boolean entradaValida = false;
-
-        do {
-            try {
-                mostrarMensaje(mensaje);
-                String entrada = scanner.nextLine();
-                partes = entrada.split(" ");
-                if (partes.length != 2) {
-                    mostrarMensaje("Entrada no válida. Debe ingresar filas y columnas separadas por un espacio.");
-                    continue; // Volver a solicitar la entrada
-                }
-
-                // Validar que ambas partes sean números enteros (positivos o negativos)
-                int fila = Integer.parseInt(partes[0]);
-                int columna = Integer.parseInt(partes[1]);
-
-                entradaValida = true;
-            } catch (NumberFormatException e) {
-                mostrarMensaje("Entrada no válida. Debe ingresar dos números enteros.");
-            }
-        } while (!entradaValida);
-
-        return partes;
-    }
-
-   public static int obtenerFilaDesdeEntrada(String entrada) {
-    int fila = 0;  // Valor predeterminado en caso de no encontrar una fila válida
-
-    if ("-1 -1".equals(entrada)) {
-        return -1;  // Si la entrada es "-1 -1", devuelve directamente -1
-    }
-
-    if (entrada.matches("\\d+ \\d+")) {
-        String[] partes = entrada.split(" ");
-        int filaStr = Integer.parseInt(partes[0]);
-        int columnaStr = Integer.parseInt(partes[1]);
-
-        fila = filaStr;
-    } else if (entrada.length() == 1 && Character.isLetter(entrada.charAt(0))) {
-        char letra = entrada.charAt(0);
-        if (letra >= 'a' && letra <= 'z') {
-            fila = letra - 'a' + 'A';  // Convierte a mayúscula
-        } else if (letra >= 'A' && letra <= 'Z') {
-            fila = letra;
+    
+    
+    public static boolean esNumero(String entrada) {
+        try {
+            Integer.parseInt(entrada);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
-
-    return fila;
-}
-
-public static int obtenerColumnaDesdeEntrada(String entrada) {
-    int columna = 0;  // Valor predeterminado en caso de no encontrar una columna válida
-
-    if ("-1 -1".equals(entrada)) {
-        return -1;  // Si la entrada es "-1 -1", devuelve directamente -1
-    }
-
-    if (entrada.matches("\\d+ \\d+")) {
-        String[] partes = entrada.split(" ");
-        int filaStr = Integer.parseInt(partes[0]);
-        int columnaStr = Integer.parseInt(partes[1]);
-
-        columna = columnaStr;
-    } else if (entrada.length() == 1 && Character.isLetter(entrada.charAt(0))) {
-        char letra = entrada.charAt(0);
-        if (letra >= 'a' && letra <= 'z') {
-            columna = letra - 'a' + 'A';  // Convierte a mayúscula
-        } else if (letra >= 'A' && letra <= 'Z') {
-            columna = letra;
-        }
-    }
-
-    return columna;
-}
-
-public static String obtenerOpcionDesdeEntrada(String entrada) {
-    // Obtén el último carácter de la entrada como opción
-    if (entrada.length() == 1) {
-        char opcion = entrada.charAt(0);
-        if (opcion >= 'a' && opcion <= 'z') {
-            return Character.toString(opcion).toUpperCase();  // Convierte a mayúscula
-        } else if (opcion >= 'A' && opcion <= 'Z') {
-            return Character.toString(opcion);
-        }
-    }
-
-    // Si no se pudo encontrar una opción válida, devuelve una cadena vacía
-    return "";
-}
-
 
     public void cerrarScanner() {
         scanner.close();
