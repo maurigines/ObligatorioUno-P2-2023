@@ -1,6 +1,6 @@
 package Logica;
 
-// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(PONER NUMERO)
+// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(256909)
 
 public class Celda {
     private char simbolo;

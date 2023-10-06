@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
-// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(PONER NUMERO)
+// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(256909)
 public class Tablero {
 
-    private Celda[][] elementos;
+    private Celda[][] elementos; //este es el tablero en el que trabajamos
     private Celda[][] tableroAnterior;
     private ArrayList<Coordenada> coordenadasAleatorias = new ArrayList<>();
     private ArrayList<Coordenada> movimientosRealizados = new ArrayList<>();
@@ -34,7 +34,7 @@ public class Tablero {
     this.juegoEnProgreso = true;
     this.tiempoInicio = System.currentTimeMillis() / 1000;
 
-    generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel aquí
+    generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel
 }
 
     public boolean estaEnProgreso() {
@@ -52,11 +52,10 @@ public class Tablero {
             // Realizar el último movimiento almacenado en coordenadasAleatorias
             if (!movimientosRealizados.isEmpty()) {
                 Coordenada ultimoMovimiento = movimientosRealizados.remove(movimientosRealizados.size() - 1);
+                ultimoMovimiento = coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
                 fila = ultimoMovimiento.getFila()-1;
                 columna = ultimoMovimiento.getColumna()-1;
-            } else {
-                // Si no hay movimientos almacenados, el juego continúa normalmente
-                return;
+                
             }
         }
 
@@ -138,8 +137,6 @@ public class Tablero {
     public void reiniciarTablero() {
         elementos = null;
 }
-
-
 
     public void setNivel(int nivel) {
         this.nivel = nivel;

@@ -111,10 +111,16 @@ public class Sistema {
                     int numero = Integer.parseInt(opcionMovimiento);
                     fila = numero;
                     columna = consolaUI.leerEntero("");
-                    if((-1<= fila && fila <= tablero.getNumFilas()) && (-1<= columna && columna <= tablero.getNumColumnas())){
-                    tablero.realizarMovimiento(fila - 1, columna -1);
-                    tablero.almacenarMovimientoRealizado(fila, columna);
-                    } else{
+                    if((0<= fila && fila <= tablero.getNumFilas()) && (0<= columna && columna <= tablero.getNumColumnas())){
+                        tablero.realizarMovimiento(fila - 1, columna -1);
+                        tablero.almacenarMovimientoRealizado(fila, columna);
+                    } else if((-1== fila && fila <= tablero.getNumFilas()) && (-1== columna && columna <= tablero.getNumColumnas())){
+                        tablero.realizarMovimiento(fila - 1, columna -1);
+                        tablero.almacenarMovimientoRealizado(fila, columna);
+                        consolaUI.primeraVez = true;
+                        
+                    }
+                    else{
                         consolaUI.mostrarMensaje("Entrada invalida, ingrese una entrada acorde a " + tablero.getNumFilas()+" filas y " + tablero.getNumColumnas() + " columnas");
                     }
                     
