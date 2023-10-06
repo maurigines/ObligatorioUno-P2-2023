@@ -118,7 +118,6 @@ public class Sistema {
                         tablero.realizarMovimiento(fila - 1, columna -1);
                         tablero.almacenarMovimientoRealizado(fila, columna);
                         consolaUI.primeraVez = true;
-                        
                     }
                     else{
                         consolaUI.mostrarMensaje("Entrada invalida, ingrese una entrada acorde a " + tablero.getNumFilas()+" filas y " + tablero.getNumColumnas() + " columnas");

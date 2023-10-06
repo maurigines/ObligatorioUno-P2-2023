@@ -86,7 +86,7 @@ public class ConsolaUI {
         for (int columna = 0; columna < numCols; columna++) {
             System.out.print("---+");
         }
-        System.out.print("     "); // Espacio entre los dos tableros
+        System.out.print("  ==>"); // Espacio entre los dos tableros
         // Línea superior de la fila para el tablero actual
         System.out.print("  +");
         for (int columna = 0; columna < numCols; columna++) {
@@ -103,10 +103,10 @@ public class ConsolaUI {
             String resetColor = "\u001B[0m"; // Restablece el color después del carácter
             System.out.print(" " + colorCodeAnterior + simboloAnterior + resetColor + " |");
         }
-        if (fila < numRows) {
+        if (fila <= numRows) {
             System.out.print("  ==>");
         }else{
-        System.out.print("     "); // Espacio entre los dos tableros
+        System.out.print("  ==>"); // Espacio entre los dos tableros
         }
         // Número de fila alineado a la derecha para el tablero actual
         System.out.printf("%2d|", fila + 1);
@@ -127,7 +127,7 @@ public class ConsolaUI {
         System.out.print("---+");
     }
 
-    System.out.print("     "); // Espacio entre los dos tableros
+    System.out.print("  ==>"); // Espacio entre los dos tableros
 
     // Línea inferior del tablero para el tablero actual
     System.out.print("  +");
