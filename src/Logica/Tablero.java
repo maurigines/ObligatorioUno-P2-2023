@@ -408,46 +408,52 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
    public void configurarTableroPredefinido() {
     configurarJuego(5, 6, 0);
 
-    //FALTAN LOS DATOS DE VERDAD DEL TABLERO
+    
     // Configurar las celdas del tablero predefinido
-  getElementos()[0][0] = new Celda('|', 'A');
-    getElementos()[0][1] = new Celda('-', 'R');
+    getElementos()[0][0] = new Celda('|', 'A');
+    getElementos()[0][1] = new Celda('|', 'R');
     getElementos()[0][2] = new Celda('-', 'R');
-    getElementos()[0][3] = new Celda('\\', 'A');
-    getElementos()[0][4] = new Celda('\\', 'A');
-    getElementos()[0][5] = new Celda('\\', 'A');
+    getElementos()[0][3] = new Celda('/', 'A');
+    getElementos()[0][4] = new Celda('|', 'A');
+    getElementos()[0][5] = new Celda('-', 'A');
 
-    getElementos()[1][0] = new Celda('|', 'A');
+    getElementos()[1][0] = new Celda('-', 'A');
     getElementos()[1][1] = new Celda('/', 'R');
-    getElementos()[1][2] = new Celda('-', 'R');
+    getElementos()[1][2] = new Celda('|', 'R');
     getElementos()[1][3] = new Celda('-', 'A');
-    getElementos()[1][4] = new Celda('/', 'A');
-    getElementos()[1][5] = new Celda('\\', 'A');
+    getElementos()[1][4] = new Celda('-', 'A');
+    getElementos()[1][5] = new Celda('-', 'A');
 
     getElementos()[2][0] = new Celda('-', 'A');
-    getElementos()[2][1] = new Celda('/', 'R');
+    getElementos()[2][1] = new Celda('-', 'R');
     getElementos()[2][2] = new Celda('|', 'R');
-    getElementos()[2][3] = new Celda('|', 'A');
+    getElementos()[2][3] = new Celda('-', 'A');
     getElementos()[2][4] = new Celda('/', 'A');
-    getElementos()[2][5] = new Celda('\\', 'A');
+    getElementos()[2][5] = new Celda('-', 'A');
 
-    getElementos()[3][0] = new Celda('|', 'A');
+    getElementos()[3][0] = new Celda('\\', 'A');
     getElementos()[3][1] = new Celda('-', 'R');
-    getElementos()[3][2] = new Celda('-', 'R');
+    getElementos()[3][2] = new Celda('|', 'R');
     getElementos()[3][3] = new Celda('\\', 'A');
-    getElementos()[3][4] = new Celda('\\', 'A');
-    getElementos()[3][5] = new Celda('\\', 'A');
+    getElementos()[3][4] = new Celda('|', 'A');
+    getElementos()[3][5] = new Celda('|', 'A');
 
-    getElementos()[4][0] = new Celda('|', 'A');
-    getElementos()[4][1] = new Celda('-', 'R');
-    getElementos()[4][2] = new Celda('-', 'R');
-    getElementos()[4][3] = new Celda('\\', 'A');
-    getElementos()[4][4] = new Celda('\\', 'A');
+    getElementos()[4][0] = new Celda('\\', 'A');
+    getElementos()[4][1] = new Celda('/', 'R');
+    getElementos()[4][2] = new Celda('/', 'R');
+    getElementos()[4][3] = new Celda('|', 'A');
+    getElementos()[4][4] = new Celda('/', 'A');
     getElementos()[4][5] = new Celda('\\', 'A');
+    
+    //Generando coordenada solución
+    Coordenada coordenadaA = new Coordenada(4, 4);
+    Coordenada coordenadaB = new Coordenada(5, 6);
+    Coordenada coordenadaC = new Coordenada(5, 4);
     
     
 
     // ACA TENEMOS QUE HACER LA LOGICA Y ALMACENAR LOS DATOS DE MOVIMIENTOS
+    //Este juego se resuelve aplicando los movimientos (4,4), (5,6) y (5,4)
 }
    
    public void limpiarHistoriales(){
