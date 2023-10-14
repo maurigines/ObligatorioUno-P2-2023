@@ -84,15 +84,18 @@ public class Sistema {
                 } else {
                     consolaUI.mostrarTableros(tablero.getTableroAnterior(), tablero.getElementos());
                 }
+                   
 
+                System.out.print("Ingrese fila o seleccione X, H, o S:");
+                
                 String opcionMovimiento = scanner.nextLine();
                 int fila = 0;
-                int columna = 0; 
+                int columna = 0;
+
                
                 if (opcionMovimiento.length() == 1 && Character.isLetter(opcionMovimiento.charAt(0))) {
                     char letra = opcionMovimiento.toUpperCase().charAt(0);
 
-                    // Realizar acciones basadas en la letra ingresada
                     switch (letra) {
                         case 'X': 
                             tablero.terminarJuego();
@@ -110,7 +113,7 @@ public class Sistema {
                 else if (consolaUI.esNumero(opcionMovimiento)) {
                     int numero = Integer.parseInt(opcionMovimiento);
                     fila = numero;
-                    columna = consolaUI.leerEntero("");
+                    columna = consolaUI.leerEntero("Ingrese columna:");
                     if((0<= fila && fila <= tablero.getNumFilas()) && (0<= columna && columna <= tablero.getNumColumnas())){
                         tablero.realizarMovimiento(fila - 1, columna -1);
                         tablero.almacenarMovimientoRealizado(fila, columna);
@@ -123,7 +126,7 @@ public class Sistema {
                         consolaUI.mostrarMensaje("Entrada invalida, ingrese una entrada acorde a " + tablero.getNumFilas()+" filas y " + tablero.getNumColumnas() + " columnas");
                     }
                     
-                } // Opción inválida
+                }
                 else {
                     System.out.println("Opción inválida.");
                 }
@@ -160,5 +163,5 @@ public class Sistema {
         consolaUI.mostrarMensaje("Gracias por jugar a Soliflips. Hasta luego!");
     }
 
-    // Agrega aquí las funciones obtenerFilaDesdeEntrada, obtenerColumnaDesdeEntrada y obtenerOpcionDesdeEntrada
+    
 }
