@@ -1,6 +1,9 @@
 package Interfaz;
 
 import Logica.Celda;
+import Logica.Coordenada;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class ConsolaUI {
@@ -144,7 +147,7 @@ public class ConsolaUI {
         boolean entradaValida = false;
         do {
             try {
-                System.out.print(mensaje);
+                System.out.println(mensaje);
                 valor = Integer.parseInt(scanner.nextLine());
                 entradaValida = true;
             } catch (NumberFormatException e) {
@@ -164,6 +167,27 @@ public class ConsolaUI {
             return false;
         }
     }
+    
+    public String mostrarHistoriaMovimientos(ArrayList <Coordenada> movimientosRealizados) {
+        String historialMovimientos = "";
+        for (Coordenada movimiento : movimientosRealizados) {
+            historialMovimientos += ("(" + (movimiento.getFila()) + ", " + (movimiento.getColumna()) + ")" +" ");
+        }
+            return "Los movimientos Realizados son: " + historialMovimientos;
+    }
+    
+     public String mostrarSecuenciaMovimientos(ArrayList <Coordenada> caminoSolucion) {
+        String secuenciaSolucion = "";
+               
+        
+        for (Coordenada pasoSolucion : caminoSolucion){
+            secuenciaSolucion += ("(" + (pasoSolucion.getFila()) + ", " + (pasoSolucion.getColumna()) + ")" +" ");
+        }
+        
+        return "Los movimientos para ganar son: " + secuenciaSolucion;
+    }
+    
+  
 
     public void cerrarScanner() {
         scanner.close();

@@ -65,7 +65,11 @@ public class Sistema {
                         nivel = consolaUI.leerEntero("Ingrese el nivel (entre 1 y 8): ");
                     } while (nivel < 1 || nivel > 8);
                     consolaUI.mostrarMensaje(" ");
+                    
+                                      
                     tablero.configurarJuego(filas, columnas, nivel);
+                    
+                    
                     break;
                 default:
                     consolaUI.mostrarMensaje("Opcion no valida. Por favor, seleccione a, b o c.");
@@ -81,12 +85,12 @@ public class Sistema {
                 if (consolaUI.primeraVez) {
                     consolaUI.actualizarTablero(tablero.getElementos());
                     consolaUI.primeraVez = false;
-                } else {
-                    consolaUI.mostrarTableros(tablero.getTableroAnterior(), tablero.getElementos());
-                }
+                } 
+                    
+                
                    
 
-                System.out.print("Ingrese fila o seleccione X, H, o S:");
+                consolaUI.mostrarMensaje("Ingrese fila o seleccione X, H, o S:");
                 
                 String opcionMovimiento = scanner.nextLine();
                 int fila = 0;
@@ -101,22 +105,24 @@ public class Sistema {
                             tablero.terminarJuego();
                             break;
                         case 'H':
-                            consolaUI.mostrarMensaje(tablero.mostrarHistoriaMovimientos());
+                            consolaUI.mostrarMensaje(consolaUI.mostrarHistoriaMovimientos(tablero.mostrarHistoriaMovimientos()));
                             break;
                         case 'S':
-                           consolaUI.mostrarMensaje(tablero.mostrarSecuenciaMovimientos());
+                           consolaUI.mostrarMensaje(consolaUI.mostrarSecuenciaMovimientos(tablero.mostrarSecuenciaMovimientos()));
                             break;
                         default:
-                            consolaUI.mostrarMensaje("Opción invalida para la letra ingresada.");
+                            consolaUI.mostrarMensaje("Opcion invalida para la letra ingresada.");
                     }
                 } // Verificar si la entrada es un número
                 else if (consolaUI.esNumero(opcionMovimiento)) {
                     int numero = Integer.parseInt(opcionMovimiento);
                     fila = numero;
                     columna = consolaUI.leerEntero("Ingrese columna:");
+                    
                     if((0<= fila && fila <= tablero.getNumFilas()) && (0<= columna && columna <= tablero.getNumColumnas())){
                         tablero.realizarMovimiento(fila - 1, columna -1);
                         tablero.almacenarMovimientoRealizado(fila, columna);
+                        consolaUI.mostrarTableros(tablero.getTableroAnterior(), tablero.getElementos());
                     } else if((-1== fila && fila <= tablero.getNumFilas()) && (-1== columna && columna <= tablero.getNumColumnas())){
                         tablero.realizarMovimiento(fila - 1, columna -1);
                         tablero.almacenarMovimientoRealizado(fila, columna);
@@ -128,7 +134,7 @@ public class Sistema {
                     
                 }
                 else {
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
                 }
 
                

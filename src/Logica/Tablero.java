@@ -15,13 +15,13 @@ public class Tablero {
     private ArrayList<Coordenada> coordenadasAleatorias = new ArrayList<>();
     private ArrayList<Coordenada> movimientosRealizados = new ArrayList<>();
     private ArrayList<Coordenada> caminoSolucion = new ArrayList<>();
-    private int numFilas;
-    private int numColumnas;
-    private int nivel;
-    private int pasosActuales;
-    private boolean juegoGanado;
-    private boolean juegoEnProgreso;
-    private long tiempoInicio;
+    private int numFilas = 0;
+    private int numColumnas = 0;
+    private int nivel = 0;
+    private int pasosActuales = 0;
+    private boolean juegoGanado = false;
+    private boolean juegoEnProgreso = false;
+    private long tiempoInicio = 0;
 
   
     
@@ -78,46 +78,45 @@ public class Tablero {
 
 
     public void almacenarMovimientoRealizado(int fila, int columna) {
-        if (fila > 0 && columna > 0) {
-            Coordenada movimientoRealizado = new Coordenada(fila, columna);
-            movimientosRealizados.add(movimientoRealizado);
-            if (!coordenadasAleatorias.isEmpty()) {
-                Coordenada ultimaCoordenada = coordenadasAleatorias.get(coordenadasAleatorias.size() - 1);
-                if (ultimaCoordenada.equals(movimientoRealizado)) {
-                    // El movimiento coincide con la última coordenada en coordenadasAleatorias, elimínala y no lo agregues a movimientosRealizados.
-                    coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
-                } else {
-                    // El movimiento no coincide, agrégalo a movimientosRealizados y también en coordenadasAleatorias.
-                    coordenadasAleatorias.add(movimientoRealizado);
+    if (fila > 0 && columna > 0) {
+        Coordenada movimientoRealizado = new Coordenada(fila, columna);
+        movimientosRealizados.add(movimientoRealizado);
+        if (!coordenadasAleatorias.isEmpty()) {
+            boolean encontrado = false;
+            int indexEncontrado = -1;
+            for (int i = 0; i < coordenadasAleatorias.size(); i++) {
+                if (coordenadasAleatorias.get(i).equals(movimientoRealizado) && !encontrado) {
+                    encontrado = true;
+                    indexEncontrado = i;
+                    
                 }
             }
+            if (encontrado) {
+                coordenadasAleatorias.remove(indexEncontrado);
+            } else {
+                coordenadasAleatorias.add(movimientoRealizado);
+            }
         }
+    }
+
+
     
 
     
 
     
     }
-    public String mostrarHistoriaMovimientos() {
-        String historialMovimientos = "";
-        for (Coordenada movimiento : movimientosRealizados) {
-            historialMovimientos += ("(" + (movimiento.getFila()) + ", " + (movimiento.getColumna()) + ")" +" ");
-        }
-            return "Los movimientos Realizados son: " + historialMovimientos;
+    public ArrayList <Coordenada> mostrarHistoriaMovimientos() {
+            return movimientosRealizados;
     }
 
-    public String mostrarSecuenciaMovimientos() {
-        String secuenciaSolucion = "";
+    public  ArrayList <Coordenada> mostrarSecuenciaMovimientos() {
         caminoSolucion.clear(); // Vaciar caminoSolucion
         caminoSolucion.addAll(coordenadasAleatorias);
         Collections.reverse(caminoSolucion);
-        
-        
-        for (Coordenada pasoSolucion : caminoSolucion){
-            secuenciaSolucion += ("(" + (pasoSolucion.getFila()) + ", " + (pasoSolucion.getColumna()) + ")" +" ");
-        }
-        
-        return "Los movimientos para ganar son: " + secuenciaSolucion;
+              
+                
+        return caminoSolucion;
     }
     
 
@@ -125,7 +124,7 @@ public class Tablero {
         long tiempoFin = System.currentTimeMillis() / 1000;
         long tiempoTotal = tiempoFin - tiempoInicio;
 
-        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en "   + " y en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
+        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
         resultado += "Tiempo total de la partida: " + tiempoTotal + " segundos";
 
         return resultado;
@@ -154,7 +153,11 @@ public class Tablero {
     public int getPasosActuales() {
         return pasosActuales;
     }
-
+    
+    public boolean isJuegoGanado() {
+        return juegoGanado;
+    }
+    
     public void setJuegoGanado(boolean juegoGanado) {
         this.juegoGanado = juegoGanado;
     }
@@ -389,16 +392,13 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
 
         
       
-
-        // Leer los pasos para ganar
-        while (scanner.hasNextInt()) {
+        for (int i = 0; i < nivel; i++) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
             Coordenada coordenada = new Coordenada(x, y);
             coordenadasAleatorias.add(coordenada);
         }
-
-        // Cerrar el scanner
+     
         scanner.close();
     } catch (FileNotFoundException e) {
         System.err.println("El archivo 'datos.txt' no se encontro en la ubicacion especificada.");
