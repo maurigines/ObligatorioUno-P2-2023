@@ -1,3 +1,4 @@
+// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(256909)
 package Logica;
 
 import java.io.File;
@@ -7,10 +8,10 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
-// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(256909)
+
 public class Tablero {
 
-    private Celda[][] elementos; //este es el tablero en el que trabajamos
+    private Celda[][] elementos; 
     private Celda[][] tableroAnterior;
     private ArrayList<Coordenada> coordenadasAleatorias = new ArrayList<>();
     private ArrayList<Coordenada> movimientosRealizados = new ArrayList<>();
@@ -35,7 +36,11 @@ public class Tablero {
     this.tiempoInicio = System.currentTimeMillis() / 1000;
     
    
-    generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel
+    do {
+        generarTableroAleatorio(filas, columnas, nivel);
+        this.pasosActuales = 0;
+        this.tiempoInicio = System.currentTimeMillis() / 1000;
+    } while (juegoGanado);
     
 }
 
@@ -51,7 +56,7 @@ public class Tablero {
     copiarTableroActualATableroAnterior();
   
         if (fila == -2 && columna == -2) {
-            // Realizar el último movimiento almacenado en coordenadasAleatorias
+            
             if (!movimientosRealizados.isEmpty()) {
                 Coordenada ultimoMovimiento = movimientosRealizados.remove(movimientosRealizados.size() - 1);
                 ultimoMovimiento = coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
@@ -63,7 +68,7 @@ public class Tablero {
 
         
         if (movimientoValido(fila, columna)) {
-            // Actualizar el tablero después de cada movimiento
+           
             cambiarColor(fila, columna);
 
             
@@ -113,7 +118,7 @@ public class Tablero {
     }
 
     public  ArrayList <Coordenada> mostrarSecuenciaMovimientos() {
-        caminoSolucion.clear(); // Vaciar caminoSolucion
+        caminoSolucion.clear(); 
         caminoSolucion.addAll(coordenadasAleatorias);
         Collections.reverse(caminoSolucion);
               
@@ -162,32 +167,32 @@ public class Tablero {
     }
 
     public boolean verificarVictoria() {
-        // Inicialmente asumimos que el juego está ganado
+       
         boolean juegoGanado = true;
 
-        // Tomamos el primer color como referencia
+       
         char primerColor = elementos[0][0].getColor();
 
-        // Iterar sobre todas las celdas del tablero
+        
         for (int fila = 0; fila < numFilas; fila++) {
             for (int columna = 0; columna < numColumnas; columna++) {
-                // Obtener el color de la celda actual
+               
                 char colorActual = elementos[fila][columna].getColor();
 
-                // Si el color de la celda actual es diferente al primer color, el juego no está ganado
+               
                 if (colorActual != primerColor) {
                     juegoGanado = false;
-                    break; // Salir del bucle interno
+                    break; 
                 }
             }
 
-            // Si el juego ya no está ganado, salir del bucle externo
+           
             if (!juegoGanado) {
                 break;
             }
         }
 
-        // Devolver el estado final del juego
+       
         return juegoGanado;
     }
 
@@ -200,7 +205,7 @@ public class Tablero {
     Random random = new Random();
     elementos = new Celda[filas][columnas];
     
-    // Llenar el tablero con elementos aleatorios y color 'R' (rojo)
+    
     for (int fila = 0; fila < filas; fila++) {
         for (int columna = 0; columna < columnas; columna++) {
             char simbolo = obtenerElementoAleatorio(random);
@@ -209,17 +214,20 @@ public class Tablero {
         }
     }
 
-    // Generar coordenadas aleatorias para movimientos
+   
     while (coordenadasAleatorias.size() < nivel) {
         Coordenada coordenada = obtenerCoordenadasAleatorias(coordenadasAleatorias);
         coordenadasAleatorias.add(coordenada);
     }
 
-    // Realizar los movimientos aleatorios después de haber generado todas las coordenadas
+   
     for (Coordenada coordenada : coordenadasAleatorias) {
         realizarMovimiento(coordenada.getFila()-1, coordenada.getColumna()-1);
         pasosActuales = 0;
     }
+    
+  
+   
 }
 
     public void copiarTableroActualATableroAnterior() {
@@ -238,11 +246,11 @@ public class Tablero {
         boolean coordenadaUnica;
 
         do {
-            int fila = random.nextInt(numFilas) + 1; // Genera un número entre 1 y numFilas inclusive
-            int columna = random.nextInt(numColumnas) + 1; // Genera un número entre 1 y numColumnas inclusive
+            int fila = random.nextInt(numFilas) + 1; 
+            int columna = random.nextInt(numColumnas) + 1; 
             coordenada = new Coordenada(fila, columna);
 
-            // Verifica si la coordenada es única
+            
             coordenadaUnica = true;
             for (Coordenada existente : coordenadasAleatorias) {
                 if (existente.equals(coordenada)) {
@@ -258,23 +266,23 @@ public class Tablero {
 
 
     private char obtenerElementoAleatorio(Random random) {
-        // Array de elementos posibles (puedes personalizarlo según tus reglas)
+       
         char[] elementosPosibles = { '/', '\\', '-', '|' };
 
-        // Seleccionar un elemento aleatorio del array
+      
         int indiceAleatorio = random.nextInt(elementosPosibles.length);
         return elementosPosibles[indiceAleatorio];
     }
 
    public void cambiarColor(int fila, int columna) {
-    // Obtener la celda en la posición (fila, columna)
+    
     Celda celda = elementos[fila][columna];
 
-    // Cambiar el color de la celda actual alternando entre rojo ('R') y azul ('A')
+   
     char nuevoColor = (celda.getColor() == 'R') ? 'A' : 'R';
     celda.setColor(nuevoColor);
 
-    // Actualizar el color en las celdas relacionadas según las reglas del juego
+    
     char simbolo = celda.getSimbolo();
     if (simbolo == '/') {
         cambiarColorDiagonalInversa(fila, columna, nuevoColor);
@@ -288,46 +296,46 @@ public class Tablero {
 }
 
 private void cambiarColorDiagonal(int fila, int columna, char colorActual) {
-    // Cambiar el color de la diagonal actual hacia arriba
+   
     for (int i = fila, j = columna; i >= 0 && j >= 0; i--, j--) {
         cambiarColorCelda(i, j);
     }
 
-    // Cambiar el color de la diagonal actual hacia abajo
+    
     for (int i = fila, j = columna; i < numFilas && j < numColumnas; i++, j++) {
         cambiarColorCelda(i, j);
     }
 }
 
 private void cambiarColorDiagonalInversa(int fila, int columna, char colorActual) {
-    // Cambiar el color de la diagonal inversa hacia arriba
+   
     for (int i = fila, j = columna; i >= 0 && j < numColumnas; i--, j++) {
         cambiarColorCelda(i, j);
     }
 
-    // Cambiar el color de la diagonal inversa hacia abajo
+   
     for (int i = fila, j = columna; i < numFilas && j >= 0; i++, j--) {
         cambiarColorCelda(i, j);
     }
 }
 
 private void cambiarColorFila(int fila, int columna, char nuevoColor) {
-    // Cambiar el color de la celda en la fila antes de iterar
+   
     cambiarColorCelda(fila, columna); 
     
-    // Cambiar todo el contenido de la fila al nuevo color
+    
     for (int j = 0; j < numColumnas; j++) {
         cambiarColorCelda(fila, j);
     }
 }
 
 private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
-    // Cambiar el color de la celda en la columna antes de iterar
+    
     cambiarColorCelda(fila, columna); 
     
-    // Cambiar todo el contenido de la columna al nuevo color
+   
     for (int i = 0; i < numFilas; i++) {
-        cambiarColorCelda(i, columna); // Cambia el color de cada celda en la columna
+        cambiarColorCelda(i, columna); 
     }
 }
 
@@ -352,11 +360,11 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
     public boolean movimientoValido(int fila, int columna) {
         boolean esValido = true;
         if (fila < 0 || fila >= numFilas || columna < 0 || columna >= numColumnas) {
-            esValido = false; // Movimiento fuera de los límites del tablero
+            esValido = false; 
         }
 
        
-        return esValido; // Si el movimiento es válido según las reglas
+        return esValido; 
     }
 
   
@@ -365,29 +373,29 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
     try {
         Scanner scanner = new Scanner(new File(".\\Test\\datos.txt"));
 
-        // Leer el número de filas y columnas
+       
         int filas = scanner.nextInt();
         int columnas = scanner.nextInt();
-        scanner.nextLine(); // Consumir la línea en blanco después de los números
+        scanner.nextLine(); 
        
         
        
         configurarJuego(filas, columnas, 0);
 
-        // Leer el tablero
+       
         for (int fila = 0; fila < filas; fila++) {
             String filaTablero = scanner.nextLine();
             for (int columna = 0; columna < columnas; columna++) {
-                char simbolo = filaTablero.charAt(columna*3); // Los símbolos están separados por un espacio
+                char simbolo = filaTablero.charAt(columna*3); 
                 char color = filaTablero.charAt(columna*3 + 1);
-                // Configurar la celda en la fila y columna correspondiente
+                
                 getElementos()[fila][columna] = new Celda(simbolo, color);
             }
         }
 
-        // Leer el nivel
+        
         int nivel = scanner.nextInt();
-        scanner.nextLine(); // Consumir la línea en blanco después del nivel
+        scanner.nextLine(); 
 
         
       
@@ -409,7 +417,7 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
     configurarJuego(5, 6, 0);
 
     
-    // Configurar las celdas del tablero predefinido
+   
     getElementos()[0][0] = new Celda('|', 'A');
     getElementos()[0][1] = new Celda('|', 'A');
     getElementos()[0][2] = new Celda('-', 'R');
@@ -445,15 +453,14 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
     getElementos()[4][4] = new Celda('/', 'A');
     getElementos()[4][5] = new Celda('\\', 'A');
     
-    //Generando coordenada solución
+   
     Coordenada coordenadaA = new Coordenada(4, 4);
     Coordenada coordenadaB = new Coordenada(5, 6);
     Coordenada coordenadaC = new Coordenada(5, 4);
     
     
 
-    // ACA TENEMOS QUE HACER LA LOGICA Y ALMACENAR LOS DATOS DE MOVIMIENTOS
-    //Este juego se resuelve aplicando los movimientos (4,4), (5,6) y (5,4)
+   
     Coordenada coordenada1 = new Coordenada(4, 4);
     Coordenada coordenada2 = new Coordenada(5, 6);
     Coordenada coordenada3 = new Coordenada(5, 4);

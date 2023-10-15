@@ -1,3 +1,5 @@
+// Autores: Mauricio Gines Martinez Miglionico (255043), Andres Sarmiento(256909)
+
 package Interfaz;
 
 
@@ -77,11 +79,11 @@ public class Sistema {
                     continue;
             }
 
-            // Bucle while que actualiza los tableros
+           
             consolaUI.primeraVez = true;
            
             while (tablero.estaEnProgreso()) {
-                // Mostrar el tablero antes de que el jugador ingrese un movimiento
+                
                 if (consolaUI.primeraVez) {
                     consolaUI.actualizarTablero(tablero.getElementos());
                     consolaUI.primeraVez = false;
@@ -113,7 +115,7 @@ public class Sistema {
                         default:
                             consolaUI.mostrarMensaje("Opcion invalida para la letra ingresada.");
                     }
-                } // Verificar si la entrada es un número
+                } 
                 else if (consolaUI.esNumero(opcionMovimiento)) {
                     int numero = Integer.parseInt(opcionMovimiento);
                     fila = numero;
