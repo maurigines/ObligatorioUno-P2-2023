@@ -33,8 +33,10 @@ public class Tablero {
     this.juegoGanado = false;
     this.juegoEnProgreso = true;
     this.tiempoInicio = System.currentTimeMillis() / 1000;
-
+    
+   
     generarTableroAleatorio(filas, columnas, nivel); // No cambies el nivel
+    
 }
 
     public boolean estaEnProgreso() {
@@ -154,10 +156,7 @@ public class Tablero {
         return pasosActuales;
     }
     
-    public boolean isJuegoGanado() {
-        return juegoGanado;
-    }
-    
+      
     public void setJuegoGanado(boolean juegoGanado) {
         this.juegoGanado = juegoGanado;
     }
