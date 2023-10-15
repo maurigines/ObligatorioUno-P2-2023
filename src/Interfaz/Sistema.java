@@ -149,7 +149,7 @@ public class Sistema {
 
             consolaUI.mostrarMensaje(" ");
             consolaUI.mostrarMensaje("El juego ha terminado.");
-            consolaUI.mostrarMensaje(tablero.mostrarResultado());
+            consolaUI.mostrarMensaje(consolaUI.mostrarResultado(tablero.isJuegoGanado(), tablero.getPasosActuales(), tablero.getTiempoInicio()));
             consolaUI.mostrarMensaje("Desea jugar otra partida? (s/n)");
             respuesta = scanner.nextLine().toLowerCase();
             jugarNuevaPartida = respuesta.equals("s");

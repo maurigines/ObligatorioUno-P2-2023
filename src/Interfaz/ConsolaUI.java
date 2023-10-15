@@ -190,6 +190,15 @@ public class ConsolaUI {
         return "Los movimientos para ganar son: " + secuenciaSolucion;
     }
     
+     public String mostrarResultado(boolean juegoGanado, int pasosActuales, long tiempoInicio) {
+        long tiempoFin = System.currentTimeMillis() / 1000;
+        long tiempoTotal = tiempoFin - tiempoInicio;
+
+        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
+        resultado += "Tiempo total de la partida: " + tiempoTotal + " segundos";
+
+        return resultado;
+    }
   
 
     public void cerrarScanner() {

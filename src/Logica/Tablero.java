@@ -126,17 +126,7 @@ public class Tablero {
         return caminoSolucion;
     }
     
-
-    public String mostrarResultado() {
-        long tiempoFin = System.currentTimeMillis() / 1000;
-        long tiempoTotal = tiempoFin - tiempoInicio;
-
-        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
-        resultado += "Tiempo total de la partida: " + tiempoTotal + " segundos";
-
-        return resultado;
-    }
-    
+        
     public Celda[][] getTableroAnterior() {
     return tableroAnterior;
 }
@@ -474,6 +464,14 @@ private void cambiarColorColumna(int fila, int columna, char nuevoColor) {
        coordenadasAleatorias.clear();
        movimientosRealizados.clear();
    }
+
+    public long getTiempoInicio() {
+        return tiempoInicio;
+    }
+
+    public boolean isJuegoGanado() {
+        return juegoGanado;
+    }
 
     
 }
