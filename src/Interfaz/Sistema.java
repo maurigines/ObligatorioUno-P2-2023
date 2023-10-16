@@ -39,7 +39,7 @@ public class Sistema {
             consolaUI.mostrarMensaje("c) Usar un tablero al azar");
             consolaUI.mostrarMensaje(" ");
 
-            String opcion = scanner.nextLine();
+            String opcion = scanner.nextLine().toLowerCase();
 
             switch (opcion) {
                 case "a":

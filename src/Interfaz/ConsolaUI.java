@@ -163,12 +163,14 @@ public class ConsolaUI {
     
     
     public static boolean esNumero(String entrada) {
+        boolean numero;
         try {
             Integer.parseInt(entrada);
-            return true;
+            numero =  true;
         } catch (NumberFormatException e) {
-            return false;
-        }
+            numero = false;
+            }
+        return numero;
     }
     
     public String mostrarHistoriaMovimientos(ArrayList <Coordenada> movimientosRealizados) {
@@ -194,11 +196,18 @@ public class ConsolaUI {
         long tiempoFin = System.currentTimeMillis() / 1000;
         long tiempoTotal = tiempoFin - tiempoInicio;
 
-        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en " + (pasosActuales) + " pasos" + "\n"  : "Lo siento, no has ganado el juego.\n";
-        resultado += "Tiempo total de la partida: " + tiempoTotal + " segundos";
+        int horas = (int) tiempoTotal / 3600;
+        int minutos = (int) (tiempoTotal % 3600) / 60;
+        int segundos = (int) tiempoTotal % 60;
+
+        String resultadoTiempo = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+
+        String resultado = juegoGanado ? "Felicidades!! Has ganado el juego en " + (pasosActuales) + " pasos" + "\n" : "Lo siento, no has ganado el juego.\n";
+        resultado += "Tiempo total de la partida: " + resultadoTiempo;
 
         return resultado;
     }
+
   
 
     public void cerrarScanner() {

@@ -55,16 +55,37 @@ public class Tablero {
  public void realizarMovimiento(int fila, int columna) {
     copiarTableroActualATableroAnterior();
   
-        if (fila == -2 && columna == -2) {
-            
+              if (fila == -2 && columna == -2) {
+           
             if (!movimientosRealizados.isEmpty()) {
-                Coordenada ultimoMovimiento = movimientosRealizados.remove(movimientosRealizados.size() - 1);
-                ultimoMovimiento = coordenadasAleatorias.remove(coordenadasAleatorias.size() - 1);
-                fila = ultimoMovimiento.getFila()-1;
-                columna = ultimoMovimiento.getColumna()-1;
-                
+                Coordenada ultimoMovimientoRealizado = movimientosRealizados.get(movimientosRealizados.size() - 1);
+                fila = ultimoMovimientoRealizado.getFila() - 1;
+                columna = ultimoMovimientoRealizado.getColumna() - 1;
+               
+             
+                    
+
+                boolean encontrado = false;
+                for (Coordenada coordenada : coordenadasAleatorias) {
+                    if (ultimoMovimientoRealizado.equals(coordenada)) {
+                        encontrado = true;
+                        System.out.println("Encontrado");
+                        break;
+                    }
+                }
+
+                if (encontrado) {
+                    movimientosRealizados.remove(movimientosRealizados.size() - 1);
+                    coordenadasAleatorias.remove(ultimoMovimientoRealizado);
+                } else {
+                    coordenadasAleatorias.add(ultimoMovimientoRealizado);
+                    movimientosRealizados.remove(movimientosRealizados.size() - 1);
+                }
             }
         }
+
+
+
 
         
         if (movimientoValido(fila, columna)) {
@@ -274,15 +295,14 @@ public class Tablero {
 
     
     char simbolo = celda.getSimbolo();
-    if (simbolo == '/') {
-        cambiarColorDiagonalInversa(fila, columna, nuevoColor);
-    } else if (simbolo == '\\') {
-        cambiarColorDiagonal(fila, columna, nuevoColor);
-    } else if (simbolo == '-') {
-        cambiarColorFila(fila, columna, nuevoColor);
-    } else if (simbolo == '|') {
-        cambiarColorColumna(fila, columna, nuevoColor);
-    }
+        switch (simbolo) {
+            case '/' -> cambiarColorDiagonalInversa(fila, columna, nuevoColor);
+            case '\\' -> cambiarColorDiagonal(fila, columna, nuevoColor);
+            case '-' -> cambiarColorFila(fila, columna, nuevoColor);
+            case '|' -> cambiarColorColumna(fila, columna, nuevoColor);
+            default -> {
+            }
+        }
 }
 
 private void cambiarColorDiagonal(int fila, int columna, char colorActual) {
